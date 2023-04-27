@@ -1,4 +1,4 @@
-package Relations.LoanApplication;
+package LoanApplication;
 
 public class LoanApplication {
     private int id;

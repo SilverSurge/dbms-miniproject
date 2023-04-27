@@ -1,4 +1,4 @@
-package Relations.Transaction;
+package Transaction;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -36,7 +36,7 @@ public class TransactionDAO {
                 res.setSenderId(rs.getInt("sender_id"));
                 res.setReceiverId(rs.getInt("receiver_id"));
                 res.setAmount(rs.getInt("amount"));
-                res.setContext(rs.getBoolean("context"));
+                res.setContext(rs.getString("context"));
                 res.setLoanId(rs.getInt("loan_id"));
                 return res;
             }
@@ -70,7 +70,7 @@ public class TransactionDAO {
                 trans.setSenderId(rs.getInt("sender_id"));
                 trans.setReceiverId(rs.getInt("receiver_id"));
                 trans.setAmount(rs.getInt("amount"));
-                trans.setContext(rs.getBoolean("context"));
+                trans.setContext(rs.getString("context"));
                 trans.setLoanId(rs.getInt("loan_id"));
                 res.add(trans);
             }
@@ -86,7 +86,7 @@ public class TransactionDAO {
     }
 
     // done
-    public Transaction makeTransaction(int sender_id, int receiver_id, int amount, boolean context, int loan_id) {
+    public Integer makeTransaction(int sender_id, int receiver_id, int amount, String context, int loan_id) {
         Transaction res = new Transaction(sender_id, receiver_id, amount, context, loan_id);
         String sql;
         sql = "INSERT INTO transaction(sender_id, receiver_id, amount, context, loan_id) values(?,?,?,?,?)";
@@ -97,14 +97,14 @@ public class TransactionDAO {
             pstmt.setInt(1, sender_id);
             pstmt.setInt(2, receiver_id);
             pstmt.setInt(3, amount);
-            pstmt.setBoolean(4, context);
+            pstmt.setString(4, context);
             pstmt.setInt(5, loan_id);
             pstmt.executeUpdate();
             ResultSet keys = pstmt.getGeneratedKeys();
             if (keys.next()) {
                 int key = keys.getInt(1);
                 res.setId(key);
-                return res;
+                return key;
             }
 
         } catch (SQLException ex) {

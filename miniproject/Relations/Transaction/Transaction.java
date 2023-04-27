@@ -1,17 +1,17 @@
-package Relations.Transaction;
+package Transaction;
 
 public class Transaction {
     private int id;
     private int sender_id;
     private int receiver_id;
     private int amount;
-    private boolean context;
+    private String context;
     private int loan_id;
 
     public Transaction() {
     }
 
-    public Transaction(int sender_id, int receiver_id, int amount, boolean context, int loan_id) {
+    public Transaction(int sender_id, int receiver_id, int amount, String context, int loan_id) {
         this.sender_id = sender_id;
         this.receiver_id = receiver_id;
         this.amount = amount;
@@ -51,11 +51,11 @@ public class Transaction {
         this.amount = amount;
     }
 
-    public boolean getContext() {
+    public String getContext() {
         return context;
     }
 
-    public void setContext(boolean context) {
+    public void setContext(String context) {
         this.context = context;
     }
 

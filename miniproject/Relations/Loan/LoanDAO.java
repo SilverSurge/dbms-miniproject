@@ -1,4 +1,4 @@
-package Relations.Loan;
+package Loan;
 
 import java.sql.Connection;
 import java.sql.SQLException;

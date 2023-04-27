@@ -1,4 +1,4 @@
-package Relations.CreditScore;
+package CreditScore;
 
 import java.sql.Connection;
 import java.sql.SQLException;

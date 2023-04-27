@@ -4,6 +4,7 @@ import java.util.Scanner;
 import DAO_factory.DAO_Factory;
 import Person.Person;
 import Person.PersonDAO;
+import Transaction.TransactionDAO;
 
 public class LoanManagementSystem {
     private static DAO_Factory factory=new DAO_Factory();
@@ -129,9 +130,9 @@ public class LoanManagementSystem {
 
     public static void applyForLoan() throws Exception {
         System.out.println("Please enter the amount of loan you wish to apply for: ");
-        double amount = Double.parseDouble(scanner.nextLine());
+        Integer amount = scanner.nextInt();
 
-        double creditScore = getCreditScore(); // Function to get user's credit score
+        Integer creditScore = getCreditScore(); // Function to get user's credit score
 
         if (creditScore >= 700) { // Loan eligibility criteria
             System.out.println("Loan application sent for processing.");
@@ -148,12 +149,12 @@ public class LoanManagementSystem {
         System.out.println("Your loan application status is: " + status);
     }
 
-    public static void makeLoanTransaction() {
+    public static void makeLoanTransaction() throws Exception {
         System.out.println("Please enter your loan account number: ");
-        String accountNumber = scanner.nextLine();
+        Integer accountNumber = scanner.nextInt();
 
         System.out.println("Please enter the amount you wish to deposit or withdraw: ");
-        double amount = Double.parseDouble(scanner.nextLine());
+        Integer amount = scanner.nextInt();
 
         String transactionType = "";
         while (!(transactionType.equals("deposit") || transactionType.equals("withdraw"))) {
@@ -171,7 +172,7 @@ public class LoanManagementSystem {
     }
 
     public static void checkLoanEligibility() {
-        double creditScore;
+        Integer creditScore;
         try {
             creditScore = getCreditScore();
         } catch (Exception e) {
@@ -208,7 +209,7 @@ public class LoanManagementSystem {
 
         if (isNPA) {
             System.out.println("Please enter the amount to be paid to resolve the NPA: ");
-            double amount = Double.parseDouble(scanner.nextLine());
+            Integer amount = Integer.parseInteger(scanner.nextLine());
 
             boolean resolved = resolveNPA(accountNumber, amount); // Function to resolve NPA
 
@@ -224,7 +225,7 @@ public class LoanManagementSystem {
 
     // Functions below are not implemented and need to be completed
 
-    public static double getCreditScore() throws Exception {
+    public static Integer getCreditScore() throws Exception {
         // Function to get user's credit score
         return factory.getCreditScoreDAO().getCreditScoreById(currentUser.getId()).getScore();
 
@@ -235,12 +236,18 @@ public class LoanManagementSystem {
         return factory.getLoanApplicationDAO().getLoanApplicationById(loanappID).getStatus();
     }
 
-    public static void deposit(String accountNumber, double amount) {
+    public static void deposit(Integer accountNumber, Integer amount) throws Exception {
+        TransactionDAO t=factory.getTransactionDAO();
+        Integer id= t.makeTransaction(0, accountNumber, amount,"Deposit" , -1);
+        System.out.println("Trnsaction Successful id:"+id.toString());
         // Function to deposit money into loan account
     }
 
-    public static void withdraw(String accountNumber, double amount) {
+    public static void withdraw(Integer accountNumber, Integer amount) throws Exception {
         // Function to withdraw money from loan account
+        TransactionDAO t=factory.getTransactionDAO();
+        Integer id= t.makeTransaction( accountNumber,0, amount,"withdrawal" , -1);
+        System.out.println("Trnsaction Successful id:"+id.toString());
     }
 
     public static boolean checkNPA(String accountNumber) {
@@ -248,7 +255,7 @@ public class LoanManagementSystem {
         return false;
     }
 
-    public static boolean resolveNPA(String accountNumber, double amount) {
+    public static boolean resolveNPA(String accountNumber, Integer amount) {
         // Function to resolve N
 // Function to resolve NPA
 return false;
@@ -268,9 +275,13 @@ public static void adminLogin() {
     }
 }
 
-public static boolean validateUserLogin(String username, String password) {
-    // Function to validate user login credentials
-    return false;
+
+public static void viewLoanApplications() {
+    // Function to view loan applications
+}
+
+public static void approveOrRejectLoanApplication() {
+    // Function to approve or reject loan application
 }
 
 public static boolean validateAdminLogin(String username, String password) {
@@ -313,11 +324,5 @@ public static void adminMenu() {
     }
 }
 
-public static void viewLoanApplications() {
-    // Function to view loan applications
-}
 
-public static void approveOrRejectLoanApplication() {
-    // Function to approve or reject loan application
-}
 }

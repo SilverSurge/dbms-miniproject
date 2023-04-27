@@ -1,4 +1,4 @@
-package Relations.Account;
+package Account;
 
 public class Account {
     private int id;

@@ -1,4 +1,4 @@
-package Relations.LoanApplication;
+package LoanApplication;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -36,7 +36,7 @@ public class LoanApplicationDAO {
                 res.setApplicantId(rs.getInt("applicant_id"));
                 res.setAmount(rs.getInt("amount"));
                 res.setReason(rs.getString("reason"));
-                res.setStatus(rs.getBoolean("status"));
+                res.setStatus(rs.getString("status"));
                 return res;
             }
 
@@ -68,7 +68,7 @@ public class LoanApplicationDAO {
                 loan_app.setApplicantId(rs.getInt("applicant_id"));
                 loan_app.setAmount(rs.getInt("amount"));
                 loan_app.setReason(rs.getString("reason"));
-                loan_app.setStatus(rs.getBoolean("status"));
+                loan_app.setStatus(rs.getString("status"));
                 res.add(loan_app);
             }
             if (res.size() == 0)
@@ -88,7 +88,7 @@ public class LoanApplicationDAO {
     public LoanApplication makeLoanApplication(int applicant_id,
             int amount,
             String reason,
-            boolean status) {
+            String status) {
 
         LoanApplication res = new LoanApplication(applicant_id, amount, reason, status);
         String sql;
@@ -100,7 +100,7 @@ public class LoanApplicationDAO {
             pstmt.setInt(1, applicant_id);
             pstmt.setInt(2, amount);
             pstmt.setString(3, reason);
-            pstmt.setBoolean(4, status);
+            pstmt.setString(4, status);
             pstmt.executeUpdate();
             ResultSet keys = pstmt.getGeneratedKeys();
             if (keys.next()) {

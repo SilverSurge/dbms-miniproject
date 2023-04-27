@@ -1,4 +1,4 @@
-package Relations.Person;
+package Person;
 
 public class Person {
     private int id;
