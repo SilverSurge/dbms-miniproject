@@ -1,4 +1,4 @@
-package LoanApplication;
+package Relations.LoanApplication;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -22,7 +22,7 @@ public class LoanApplicationDAO {
 
         LoanApplication res = new LoanApplication();
         String sql;
-        sql = "SELECT id, applicant_id, amount, reason, status FROM loan_application WHERE id = ?";
+        sql = "SELECT id, account_id, amount, reason, status FROM loan_application WHERE id = ?";
         PreparedStatement pstmt = null;
 
         try {
@@ -33,10 +33,10 @@ public class LoanApplicationDAO {
 
             if (rs.next()) {
                 res.setId(rs.getInt("id"));
-                res.setApplicantId(rs.getInt("applicant_id"));
+                res.setAccountId(rs.getInt("account_id"));
                 res.setAmount(rs.getInt("amount"));
                 res.setReason(rs.getString("reason"));
-                res.setStatus(rs.getString("status"));
+                res.setStatus(rs.getBoolean("status"));
                 return res;
             }
 
@@ -53,7 +53,7 @@ public class LoanApplicationDAO {
     public ArrayList<LoanApplication> getLoanApplicationsByApplicantId(int person_id) {
         ArrayList<LoanApplication> res = new ArrayList<>();
         String sql;
-        sql = "SELECT id, applicant_id, amount, reason, status FROM loan_application WHERE applicant_id = ?";
+        sql = "SELECT id, account_id, amount, reason, status FROM loan_application WHERE account_id = ?";
         PreparedStatement pstmt = null;
 
         try {
@@ -65,10 +65,10 @@ public class LoanApplicationDAO {
             while (rs.next()) {
                 LoanApplication loan_app = new LoanApplication();
                 loan_app.setId(rs.getInt("id"));
-                loan_app.setApplicantId(rs.getInt("applicant_id"));
+                loan_app.setAccountId(rs.getInt("account_id"));
                 loan_app.setAmount(rs.getInt("amount"));
                 loan_app.setReason(rs.getString("reason"));
-                loan_app.setStatus(rs.getString("status"));
+                loan_app.setStatus(rs.getBoolean("status"));
                 res.add(loan_app);
             }
             if (res.size() == 0)
@@ -85,22 +85,22 @@ public class LoanApplicationDAO {
     }
 
     // done
-    public LoanApplication makeLoanApplication(int applicant_id,
+    public LoanApplication makeLoanApplication(int account_id,
             int amount,
             String reason,
-            String status) {
+            boolean status) {
 
-        LoanApplication res = new LoanApplication(applicant_id, amount, reason, status);
+        LoanApplication res = new LoanApplication(account_id, amount, reason, status);
         String sql;
-        sql = "INSERT INTO loan_application(applicant_id, amount, reason, status) values(?,?,?,?)";
+        sql = "INSERT INTO loan_application(account_id, amount, reason, status) values(?,?,?,?)";
         PreparedStatement pstmt = null;
 
         try {
             pstmt = dbConnection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            pstmt.setInt(1, applicant_id);
+            pstmt.setInt(1, account_id);
             pstmt.setInt(2, amount);
             pstmt.setString(3, reason);
-            pstmt.setString(4, status);
+            pstmt.setBoolean(4, status);
             pstmt.executeUpdate();
             ResultSet keys = pstmt.getGeneratedKeys();
             if (keys.next()) {

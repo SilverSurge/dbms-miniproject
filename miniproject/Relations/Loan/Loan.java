@@ -1,4 +1,4 @@
-package Loan;
+package Relations.Loan;
 
 public class Loan {
     private int id;

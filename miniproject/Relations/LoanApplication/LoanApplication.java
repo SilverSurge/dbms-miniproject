@@ -1,17 +1,17 @@
-package LoanApplication;
+package Relations.LoanApplication;
 
 public class LoanApplication {
     private int id;
-    private int applicant_id;
+    private int account_id;
     private int amount;
     private String reason;
-    private String status;
+    private boolean status;
 
     public LoanApplication() {
     }
 
-    public LoanApplication(int applicant_id, int amount, String reason, String status) {
-        this.applicant_id = applicant_id;
+    public LoanApplication(int account_id, int amount, String reason, boolean status) {
+        this.account_id = account_id;
         this.amount = amount;
         this.reason = reason;
         this.status = status;
@@ -25,12 +25,12 @@ public class LoanApplication {
         this.id = id;
     }
 
-    public int getApplicantId() {
-        return applicant_id;
+    public int getAccountId() {
+        return account_id;
     }
 
-    public void setApplicantId(int applicant_id) {
-        this.applicant_id = applicant_id;
+    public void setAccountId(int account_id) {
+        this.account_id = account_id;
     }
 
     public int getAmount() {
@@ -49,11 +49,11 @@ public class LoanApplication {
         this.reason = reason;
     }
 
-    public String getStatus() {
+    public boolean getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(boolean status) {
         this.status = status;
     }
 

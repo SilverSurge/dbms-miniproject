@@ -1,4 +1,4 @@
-package Person;
+package Relations.Person;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -17,9 +17,9 @@ public class PersonDAO {
 
     // done
     public Person getPersonById(int person_id) {
-        Person res = new Person(null, null, null, null);
+        Person res = new Person();
         String sql;
-        sql = "SELECT name, address, email, password FROM person WHERE id = ?";
+        sql = "SELECT name, address, email, password, is_admin FROM person WHERE id = ?";
         PreparedStatement pstmt = null;
 
         try {
@@ -34,6 +34,7 @@ public class PersonDAO {
                 res.setAddress(rs.getString("address"));
                 res.setEmail(rs.getString("email"));
                 res.setPassword(rs.getString("password"));
+                res.setIsAdmin(rs.getBoolean("is_admin"));
                 return res;
             }
 
@@ -48,9 +49,9 @@ public class PersonDAO {
 
     // done
     public Person getPersonByEmail(String email) {
-        Person res = new Person(null, null, null, null);
+        Person res = new Person();
         String sql;
-        sql = "SELECT id, name, address, password FROM person WHERE email = ?";
+        sql = "SELECT id, name, address, password, is_admin FROM person WHERE email = ?";
         PreparedStatement pstmt = null;
 
         try {
@@ -65,6 +66,7 @@ public class PersonDAO {
                 res.setAddress(rs.getString("address"));
                 res.setEmail(email);
                 res.setPassword(rs.getString("password"));
+                res.setIsAdmin(rs.getBoolean("is_admin"));
                 return res;
             }
 
@@ -78,10 +80,10 @@ public class PersonDAO {
     }
 
     // done
-    public Person makePerson(String name, String address, String email, String password) {
-        Person res = new Person(name, address, email, password);
+    public Person makePerson(String name, String address, String email, String password, boolean is_admin) {
+        Person res = new Person(name, address, email, password, is_admin);
         String sql;
-        sql = "INSERT INTO person(name, address, email, password) values(?,?,?,?)";
+        sql = "INSERT INTO person(name, address, email, password, is_admin) values(?,?,?,?,?)";
         PreparedStatement pstmt = null;
 
         try {
@@ -90,6 +92,7 @@ public class PersonDAO {
             pstmt.setString(2, address);
             pstmt.setString(3, email);
             pstmt.setString(4, password);
+            pstmt.setBoolean(5, is_admin);
             pstmt.executeUpdate();
             ResultSet keys = pstmt.getGeneratedKeys();
             if (keys.next()) {
