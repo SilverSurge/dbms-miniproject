@@ -1,4 +1,4 @@
-package Person;
+package Relations.Person;
 
 public class Person {
     private int id;
@@ -6,12 +6,18 @@ public class Person {
     private String address;
     private String email;
     private String password;
+    private boolean is_admin;
 
-    public Person(String name, String address, String email, String password) {
+    public Person() {
+
+    }
+
+    public Person(String name, String address, String email, String password, boolean is_admin) {
         this.name = name;
         this.address = address;
         this.email = email;
         this.password = password;
+        this.is_admin = is_admin;
     }
 
     public int getId() {
@@ -52,6 +58,14 @@ public class Person {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public boolean getIsAdmin() {
+        return is_admin;
+    }
+
+    public void setIsAdmin(boolean is_admin) {
+        this.is_admin = is_admin;
     }
 
 }

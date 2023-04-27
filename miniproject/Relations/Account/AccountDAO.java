@@ -1,4 +1,4 @@
-package Account;
+package Relations.Account;
 
 import java.sql.Connection;
 import java.sql.SQLException;

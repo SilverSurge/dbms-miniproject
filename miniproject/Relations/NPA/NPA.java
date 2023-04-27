@@ -1,4 +1,4 @@
-package NPA;
+package Relations.NPA;
 
 public class NPA {
     private int id;

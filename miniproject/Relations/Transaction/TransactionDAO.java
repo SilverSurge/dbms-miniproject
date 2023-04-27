@@ -1,4 +1,4 @@
-package Transaction;
+package Relations.Transaction;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -86,7 +86,7 @@ public class TransactionDAO {
     }
 
     // done
-    public Integer makeTransaction(int sender_id, int receiver_id, int amount, String context, int loan_id) {
+    public Transaction makeTransaction(int sender_id, int receiver_id, int amount, String context, int loan_id) {
         Transaction res = new Transaction(sender_id, receiver_id, amount, context, loan_id);
         String sql;
         sql = "INSERT INTO transaction(sender_id, receiver_id, amount, context, loan_id) values(?,?,?,?,?)";
@@ -104,7 +104,7 @@ public class TransactionDAO {
             if (keys.next()) {
                 int key = keys.getInt(1);
                 res.setId(key);
-                return key;
+                return res;
             }
 
         } catch (SQLException ex) {

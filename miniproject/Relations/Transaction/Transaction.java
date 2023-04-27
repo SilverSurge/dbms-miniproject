@@ -1,4 +1,4 @@
-package Transaction;
+package Relations.Transaction;
 
 public class Transaction {
     private int id;

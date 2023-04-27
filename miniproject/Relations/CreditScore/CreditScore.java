@@ -1,4 +1,4 @@
-package CreditScore;
+package Relations.CreditScore;
 
 public class CreditScore {
     private int id;
