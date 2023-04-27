@@ -1,19 +1,23 @@
-package Relations;
 
 import java.util.Scanner;
 
-public class Terminal {
+import DAO_factory.DAO_Factory;
+import Person.Person;
+import Person.PersonDAO;
 
-    static Scanner scanner = new Scanner(System.in);
-    static boolean loggedIn = false;
-    static String currentUser = "";
+public class LoanManagementSystem {
+    private static DAO_Factory factory=new DAO_Factory();
+    private static Scanner scanner = new Scanner(System.in);
+    private static boolean loggedIn = false;
+    private static Person currentUser;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
+        factory.activateConnection();
         while (true) {
             if (!loggedIn) {
                 login();
             } else {
-                if (currentUser.equals("user")) {
+                if (currentUser.getName().equals("user")) {
                     userMenu();
                 } else if (currentUser.equals("admin")) {
                     adminMenu();
@@ -22,27 +26,73 @@ public class Terminal {
         }
     }
 
-    public static void login() {
+    public static void login() throws Exception {
         System.out.println("Welcome to the Loan Management System!");
-        System.out.println("Please enter your username: ");
-        String username = scanner.nextLine();
-        System.out.println("Please enter your password: ");
-        String password = scanner.nextLine();
+        System.out.println("1. Login");
+        System.out.println("2. Register");
+        System.out.println("Please enter your choice: ");
+        int choice = scanner.nextInt();
+        scanner.nextLine(); // consume the newline character after nextInt()
 
-        if (username.equals("user") && password.equals("password")) {
-            System.out.println("Login successful!");
-            currentUser = "user";
-            loggedIn = true;
-        } else if (username.equals("admin") && password.equals("password")) {
-            System.out.println("Login successful!");
-            currentUser = "admin";
-            loggedIn = true;
-        } else {
-            System.out.println("Incorrect username or password.");
+        switch (choice) {
+            case 1:
+                System.out.println("Please enter your username: ");
+                String username = scanner.nextLine();
+                System.out.println("Please enter your password: ");
+                String password = scanner.nextLine();
+                Person tempcheck=factory.getPersonDAO().getPersonByEmail(username);
+
+                if (!username.equals("admin") && password.equals(tempcheck.getPassword())) {
+                    System.out.println("Login successful!");
+                    currentUser = tempcheck;
+                    loggedIn = true;
+                } else if (username.equals("admin") && password.equals("password")) {
+                    System.out.println("Login successful!");
+                    currentUser = tempcheck;
+                    loggedIn = true;
+                } else {
+                    System.out.println("Incorrect username or password.");
+                }
+                break;
+            case 2:
+                registerUser();
+                break;
+            default:
+                System.out.println("Invalid choice.");
+                break;
         }
     }
 
-    public static void userMenu() {
+    public static void registerUser() throws Exception {
+        System.out.println("Please enter a name: ");
+        String name = scanner.nextLine();
+        System.out.println("Please enter a address: ");
+        String address = scanner.nextLine();
+        System.out.println("Please enter a username: ");
+        String username = scanner.nextLine();
+        System.out.println("Please enter a password: ");
+        String password = scanner.nextLine();
+
+        try {
+            factory.activateConnection();
+            PersonDAO pDao=factory.getPersonDAO();
+            Person p=pDao.makePerson(name, address, username, password);
+            System.out.println("Your person ID alloted to you is: "+p.getId());
+
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            Person p=factory.getPersonDAO().getPersonByEmail(username);
+            System.out.println("You are already registered by the person ID:"+p.getId());
+            return ;
+        }
+
+
+        // Store the new user account in a database or file
+        // For demonstration purposes, we'll assume the user account was successfully registered
+        System.out.println("User account successfully registered.");
+    }
+
+    public static void userMenu() throws Exception {
         while (true) {
             System.out.println("Welcome, user!");
             System.out.println("Please select an option:");
@@ -68,7 +118,7 @@ public class Terminal {
                     break;
                 case 5:
                     System.out.println("Logged out.");
-                    currentUser = "";
+                    currentUser = null;
                     loggedIn = false;
                     return;
                 default:
@@ -77,7 +127,7 @@ public class Terminal {
         }
     }
 
-    public static void applyForLoan() {
+    public static void applyForLoan() throws Exception {
         System.out.println("Please enter the amount of loan you wish to apply for: ");
         double amount = Double.parseDouble(scanner.nextLine());
 
@@ -90,12 +140,11 @@ public class Terminal {
         }
     }
 
-    public static void checkLoanStatus() {
+    public static void checkLoanStatus() throws Exception {
         System.out.println("Please enter your loan application ID: ");
-        String loanID = scanner.nextLine();
+        Integer loanID = scanner.nextInt();
 
-        String status = getLoanStatus(loanID
-        ); // Function to get loan application status
+        String status = getLoanStatus(loanID); // Function to get loan application status
         System.out.println("Your loan application status is: " + status);
     }
 
@@ -122,9 +171,16 @@ public class Terminal {
     }
 
     public static void checkLoanEligibility() {
-        double creditScore = getCreditScore(); // Function to get user's credit score
+        double creditScore;
+        try {
+            creditScore = getCreditScore();
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            creditScore=0;
+        } // Function to get user's credit score
 
-        if (creditScore >= 700) { // Loan eligibility criteria
+        if (creditScore >= 7) { // Loan eligibility criteria
             System.out.println("Congratulations! You are eligible for a loan.");
         } else {
             System.out.println("Sorry, you are not eligible for a loan at this time.");
@@ -168,14 +224,15 @@ public class Terminal {
 
     // Functions below are not implemented and need to be completed
 
-    public static double getCreditScore() {
+    public static double getCreditScore() throws Exception {
         // Function to get user's credit score
-        return 0.0;
+        return factory.getCreditScoreDAO().getCreditScoreById(currentUser.getId()).getScore();
+
     }
 
-    public static String getLoanStatus(String loanID) {
+    public static String getLoanStatus(Integer loanappID) throws Exception {
         // Function to get loan application status
-        return "";
+        return factory.getLoanApplicationDAO().getLoanApplicationById(loanappID).getStatus();
     }
 
     public static void deposit(String accountNumber, double amount) {

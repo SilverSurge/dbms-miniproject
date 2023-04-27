@@ -5,12 +5,12 @@ public class LoanApplication {
     private int applicant_id;
     private int amount;
     private String reason;
-    private boolean status;
+    private String status;
 
     public LoanApplication() {
     }
 
-    public LoanApplication(int applicant_id, int amount, String reason, boolean status) {
+    public LoanApplication(int applicant_id, int amount, String reason, String status) {
         this.applicant_id = applicant_id;
         this.amount = amount;
         this.reason = reason;
@@ -49,11 +49,11 @@ public class LoanApplication {
         this.reason = reason;
     }
 
-    public boolean getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(boolean status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
