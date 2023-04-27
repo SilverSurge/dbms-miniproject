@@ -209,7 +209,7 @@ public class LoanManagementSystem {
 
         if (isNPA) {
             System.out.println("Please enter the amount to be paid to resolve the NPA: ");
-            Integer amount = Integer.parseInteger(scanner.nextLine());
+            Integer amount = scanner.nextInt();
 
             boolean resolved = resolveNPA(accountNumber, amount); // Function to resolve NPA
 
