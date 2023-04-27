@@ -20,12 +20,6 @@ public class TransactionDAO {
     // done
     public Transaction getTransactionById(int transaction_id) {
 
-        // private int id;
-        // private int sender_id;
-        // private int receiver_id;
-        // private int amount;
-        // private boolean context;
-        // private int loan_id;
         Transaction res = new Transaction();
         String sql;
         sql = "SELECT sender_id, receiver_id, amount, context, loan_id FROM person WHERE id = ?";
@@ -122,5 +116,9 @@ public class TransactionDAO {
         return null;
     }
     // we have to handle the update the loan table
+
+    public boolean applyTransaction(Transaction trans) {
+        return true;
+    }
 
 }
